@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User.js");
+const Ambulance = require("../models/Ambulance.js"); // Import Ambulance model
 const { JWT_SECRET, TOKEN_EXPIRY } = require("../config/constants.js");
 
 exports.register = async (req, res) => {
@@ -10,12 +11,24 @@ exports.register = async (req, res) => {
     }
 
     try {
-        const existingUser = await User.findOne({ email });
+        let existingUser;
+        if (role === "ambulance") {
+            existingUser = await Ambulance.findOne({ email });
+        } else {
+            existingUser = await User.findOne({ email });
+        }
+
         if (existingUser) {
             return res.status(400).json({ error: "Email is already registered." });
         }
 
-        const user = new User({ name, email, password, role });
+        let user;
+        if (role === "ambulance") {
+            user = new Ambulance({ name, email, password, role });
+        } else {
+            user = new User({ name, email, password, role });
+        }
+
         await user.save();
         res.status(201).json({ message: "User registered successfully!" });
     } catch (error) {
@@ -24,16 +37,20 @@ exports.register = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
-  
-    const { email, password } = req.body;
-    console.log("received email and password are:-",email,password);
+    const { email, password, role } = req.body;
+    console.log("received email, password, and role are:-", email, password, role);
 
-    if (!email || !password) {
-        return res.status(400).json({ error: "Email and password are required." });
+    if (!email || !password || !role) {
+        return res.status(400).json({ error: "Email, password, and role are required." });
     }
 
     try {
-        const user = await User.findOne({ email });
+        let user;
+        if (role === "ambulance") {
+            user = await Ambulance.findOne({ email });
+        } else {
+            user = await User.findOne({ email });
+        }
 
         if (!user) {
             return res.status(401).json({ error: "Invalid credentials." });

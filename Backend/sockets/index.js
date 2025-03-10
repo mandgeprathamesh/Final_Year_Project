@@ -30,9 +30,12 @@ const initializeSocket = (server) => {
     io.on("connection", (socket) => {
         console.log(`Socket connected: ${socket.id}`);
 
-        // Initialize specific socket handlers
-        ambulanceSocket(io, socket);
-        userSocket(io, socket);
+        // Initialize specific socket handlers based on user role
+        if (socket.user.role === "ambulance") {
+            ambulanceSocket(io, socket);
+        } else if (socket.user.role === "user") {
+            userSocket(io, socket);
+        }
 
         socket.on("disconnect", () => {
             console.log(`Socket disconnected: ${socket.id}`);

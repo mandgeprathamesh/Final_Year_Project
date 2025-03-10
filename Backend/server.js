@@ -8,7 +8,8 @@ const initializeSocket = require("./sockets/index.js");
 // Import Routes
 const authRoutes = require("./routes/authRoutes");
 const ambulanceRoutes = require("./routes/ambulanceRoutes");
-const userRoutes = require("./routes/userRoutes"); // Import user routes
+const userRoutes = require("./routes/userRoutes");
+const sosRoutes = require("./routes/sosRoutes"); // Import SOS routes
 
 const app = express();
 const server = http.createServer(app);
@@ -16,6 +17,7 @@ const server = http.createServer(app);
 // Middleware
 app.use(cors());
 app.use(express.json());
+
 // Error handling middleware
 app.use(require("./middlewares/errorHandler"));
 
@@ -25,7 +27,8 @@ app.get("/", (req, res) => {
 });
 app.use("/api/auth", authRoutes);
 app.use("/api/ambulance", ambulanceRoutes);
-app.use("/api/users", userRoutes); // Add user routes
+app.use("/api/users", userRoutes);
+app.use("/api/sos", sosRoutes); // Add SOS routes
 
 // Socket.io
 initializeSocket(server);

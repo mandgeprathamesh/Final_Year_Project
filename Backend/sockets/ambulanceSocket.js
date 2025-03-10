@@ -1,3 +1,7 @@
+const Ambulance = require("../models/Ambulance");
+const User = require("../models/User");
+const geolib = require("geolib");
+
 module.exports = (io, socket) => {
     socket.on("ambulance-location", async (data) => {
         const { latitude, longitude } = data;
