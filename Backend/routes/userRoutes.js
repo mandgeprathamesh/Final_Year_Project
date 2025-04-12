@@ -8,9 +8,9 @@ const router = express.Router();
 router.put("/location", auth(["user"]), updateUserLocation);
 
 // Get user profile
-router.get("/profile", auth(["user"]), getUserProfile);
+// router.get("/profile", auth(["user"]), getUserProfile);
 
 // Update user profile
-router.put("/profile", auth(["user"]), updateUserProfile);
+// router.put("/profile", auth(["user"]), updateUserProfile);
 
 module.exports = router;

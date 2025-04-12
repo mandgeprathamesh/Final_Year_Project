@@ -1,4 +1,5 @@
 const SOSRequest = require("../models/SOSRequest");
+const User = require("../models/User");
 
 exports.createSOSRequest = async (req, res) => {
     const { latitude, longitude } = req.body;
@@ -12,6 +13,21 @@ exports.createSOSRequest = async (req, res) => {
     try {
         const sosRequest = new SOSRequest({ userId, latitude, longitude });
         await sosRequest.save();
+
+        // Find all connected users
+        const users = await User.find({ socketId: { $ne: null } });
+
+        // Send push notification to connected users
+        users.forEach((user) => {
+            if (user.socketId) {
+                req.io.to(user.socketId).emit("new-sos-request", {
+                    userId,
+                    latitude,
+                    longitude,
+                    sosRequestId: sosRequest._id,
+                });
+            }
+        });
 
         res.status(201).json({ sosRequest, message: "SOS request sent successfully!" });
     } catch (error) {

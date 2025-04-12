@@ -6,7 +6,8 @@ const { connectDatabase } = require("./config/db.js");
 const initializeSocket = require("./sockets/index.js");
 
 // Import Routes
-const authRoutes = require("./routes/authRoutes");
+const userauthRoutes = require("./routes/UserAuthRoutes.js");
+const ambulanceauthRoutes = require("./routes/AmbulanceAuthRoutes.js");
 const ambulanceRoutes = require("./routes/ambulanceRoutes");
 const userRoutes = require("./routes/userRoutes");
 const sosRoutes = require("./routes/sosRoutes"); // Import SOS routes
@@ -25,7 +26,8 @@ app.use(require("./middlewares/errorHandler"));
 app.get("/", (req, res) => {
     res.send("hello");
 });
-app.use("/api/auth", authRoutes);
+app.use("/api/user/auth", userauthRoutes);
+app.use("/api/ambulance/auth", ambulanceauthRoutes);
 app.use("/api/ambulance", ambulanceRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/sos", sosRoutes); // Add SOS routes

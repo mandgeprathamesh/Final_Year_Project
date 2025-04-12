@@ -1,12 +1,14 @@
 const mongoose = require("mongoose");
 
-const AmbulanceSchema = new mongoose.Schema({
+const ambulanceSchema = new mongoose.Schema({
+    ambulanceNumber: { type: String, required: true, unique: true },
     driverName: { type: String, required: true },
-    location: {
-        latitude: { type: Number, required: true },
-        longitude: { type: Number, required: true },
-    },
-    isAvailable: { type: Boolean, default: true },
-});
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    hospitalAssociated: { type: String, required: true },
+    isAvailable: { type: Boolean, default: true }, // Indicates if the ambulance is available for service
+}, { timestamps: true });
 
-module.exports = mongoose.model("Ambulance", AmbulanceSchema);
+const Ambulance = mongoose.model("Ambulance", ambulanceSchema);
+
+module.exports = Ambulance;

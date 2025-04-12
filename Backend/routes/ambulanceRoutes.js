@@ -10,9 +10,9 @@ router.get("/nearby", auth(["user", "admin"]), AmbulanceController.getNearbyAmbu
 router.post("/update-location", auth(["ambulance"]), AmbulanceController.updateLocation);
 
 // Get ambulance profile
-router.get("/profile", auth(["ambulance"]), AmbulanceController.getAmbulanceProfile);
+// router.get("/profile", auth(["ambulance"]), AmbulanceController.getAmbulanceProfile);
 
 // Update ambulance profile
-router.put("/profile", auth(["ambulance"]), AmbulanceController.updateAmbulanceProfile);
+// router.put("/profile", auth(["ambulance"]), AmbulanceController.updateAmbulanceProfile);
 
 module.exports = router;

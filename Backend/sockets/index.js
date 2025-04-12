@@ -11,7 +11,10 @@ const initializeSocket = (server) => {
         },
     });
 
-    // Middleware for authenticating sockets
+    global.io = io; // Store the io instance globally
+
+    console.log("Socket.io initialized");
+
     io.use((socket, next) => {
         const token = socket.handshake.auth.token;
         if (!token) {
@@ -30,7 +33,7 @@ const initializeSocket = (server) => {
     io.on("connection", (socket) => {
         console.log(`Socket connected: ${socket.id}`);
 
-        // Initialize specific socket handlers based on user role
+        // Assign the user socket to the respective handler
         if (socket.user.role === "ambulance") {
             ambulanceSocket(io, socket);
         } else if (socket.user.role === "user") {
