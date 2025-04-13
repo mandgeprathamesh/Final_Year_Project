@@ -3,7 +3,6 @@ const express = require("express");
 const http = require("http");
 const cors = require("cors");
 const { connectDatabase } = require("./config/db.js");
-const initializeSocket = require("./sockets/index.js");
 
 // Import Routes
 const userauthRoutes = require("./routes/UserAuthRoutes.js");
@@ -32,8 +31,6 @@ app.use("/api/ambulance", ambulanceRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/sos", sosRoutes); // Add SOS routes
 
-// Socket.io
-initializeSocket(server);
 
 // Start Server
 const PORT = process.env.PORT || 5000;

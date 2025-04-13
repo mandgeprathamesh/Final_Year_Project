@@ -4,10 +4,10 @@ const AmbulanceController = require("../controllers/AmbulanceController");
 const auth = require("../middlewares/auth");
 
 // Get nearby ambulances
-router.get("/nearby", auth(["user", "admin"]), AmbulanceController.getNearbyAmbulances);
+router.get("/nearby", AmbulanceController.getNearbyAmbulances);
 
 // Update ambulance location
-router.post("/update-location", auth(["ambulance"]), AmbulanceController.updateLocation);
+router.post("/update-location", AmbulanceController.updateLocation);
 
 // Get ambulance profile
 // router.get("/profile", auth(["ambulance"]), AmbulanceController.getAmbulanceProfile);
