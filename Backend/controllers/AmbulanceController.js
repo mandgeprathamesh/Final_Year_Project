@@ -1,7 +1,7 @@
 const Ambulance = require("../models/Ambulance");
 
 exports.updateLocation = async (req, res) => {
-    const { id } = req.user; // Assume user is authenticated
+    // const { id } = req.user; // Assume user is authenticated
     const { latitude, longitude } = req.body;
 
     if (!latitude || !longitude) {
@@ -9,11 +9,11 @@ exports.updateLocation = async (req, res) => {
     }
 
     try {
-        const ambulance = await Ambulance.findByIdAndUpdate(
-            id,
-            { latitude, longitude },
-            { new: true, upsert: true }
-        );
+        // const ambulance = await Ambulance.findByIdAndUpdate(
+        //     // id,
+        //     { latitude, longitude },
+        //     { new: true, upsert: true }
+        // );
         res.status(200).json({ ambulance, message: "Location updated successfully!" });
     } catch (error) {
         res.status(500).json({ error: "Failed to update location." });
