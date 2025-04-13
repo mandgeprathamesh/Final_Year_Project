@@ -1,6 +1,5 @@
-const jwt = require("jsonwebtoken");
 const User = require("../models/User.js");
-const { JWT_SECRET, TOKEN_EXPIRY } = require("../config/constants.js");
+const bcrypt = require("bcryptjs");
 
 exports.register = async (req, res) => {
     const { name, email, password, role } = req.body;
@@ -15,17 +14,34 @@ exports.register = async (req, res) => {
             return res.status(400).json({ error: "Email is already registered." });
         }
 
-        const user = new User({ name, email, password, role });
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const user = new User({ 
+            name, 
+            email, 
+            password: hashedPassword,
+            role 
+        });
+        
         await user.save();
-        res.status(201).json({ message: "User registered successfully!" });
+        res.status(201).json({ 
+            message: "User registered successfully!",
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role
+            }
+        });
     } catch (error) {
+        console.error("Registration error:", error);
         res.status(500).json({ error: "Failed to register user." });
     }
 };
 
 exports.login = async (req, res) => {
     const { email, password, role } = req.body;
-    console.log("Received email, password, and role:", email, password, role);
 
     if (!email || !password || !role) {
         return res.status(400).json({ error: "Email, password, and role are required." });
@@ -37,15 +53,26 @@ exports.login = async (req, res) => {
             return res.status(401).json({ error: "Invalid credentials." });
         }
 
-        const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: TOKEN_EXPIRY });
-
-        // Emit an event upon successful login (assuming io is globally available)
-        if (global.io) {
-            global.io.emit("user-logged-in", { id: user._id, role: user.role });
+        if (user.role !== role) {
+            return res.status(401).json({ error: "Invalid role for this user." });
         }
 
-        res.status(200).json({ token, message: "Login successful!" });
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(401).json({ error: "Invalid credentials." });
+        }
+
+        // Return user data without JWT token
+        res.status(200).json({ 
+            user: {
+                name: user.name,
+                email: user.email,
+                role: user.role
+            },
+            message: "Login successful!" 
+        });
     } catch (error) {
+        console.error("Login error:", error);
         res.status(500).json({ error: "Login failed." });
     }
 };
