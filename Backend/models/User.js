@@ -1,14 +1,58 @@
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
-const UserSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    lastKnownLocation: {
-        latitude: { type: Number, default: null },
-        longitude: { type: Number, default: null }
+const UserSchema = new Schema({
+    name: { 
+        type: String, 
+        required: true,
+        trim: true
     },
-    role: { type: String, enum: ["user", "ambulance", "admin"], default: "user" },
-},{ timestamps: true });
+    email: { 
+        type: String, 
+        required: true, 
+        unique: true,
+        trim: true,
+        lowercase: true,
+        match: [/.+\@.+\..+/, 'Please enter a valid email']
+    },
+    password: { 
+        type: String, 
+        required: true,
+        minlength: 6
+    },
+    location: {  // Changed from lastKnownLocation to match Flutter expectations
+        type: {
+            type: String,
+            default: "Point",
+            enum: ["Point"]
+        },
+        coordinates: {
+            type: [Number], // [longitude, latitude]
+            default: null
+        }
+    },
+    role: { 
+        type: String, 
+        enum: ["user", "admin"], // Added all roles
+        default: "user" 
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now
+    }
+});
+
+// Add geospatial index for location
+UserSchema.index({ location: '2dsphere' });
+
+// Update timestamp on save
+UserSchema.pre('save', function(next) {
+    this.updatedAt = Date.now();
+    next();
+});
 
 module.exports = mongoose.model("User", UserSchema);
