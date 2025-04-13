@@ -14,7 +14,7 @@ exports.updateLocation = async (req, res) => {
         //     { latitude, longitude },
         //     { new: true, upsert: true }
         // );
-        res.status(200).json({ ambulance, message: "Location updated successfully!" });
+        res.status(200).json({ message: "Location updated successfully!" });
     } catch (error) {
         res.status(500).json({ error: "Failed to update location." });
     }
