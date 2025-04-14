@@ -2,9 +2,9 @@ const User = require("../models/User.js");
 const bcrypt = require("bcryptjs");
 
 exports.register = async (req, res) => {
-    const { name, email, password, role } = req.body;
+    const { name, email, password } = req.body;
 
-    if (!email || !password || !name || !role) {
+    if (!email || !password || !name) {
         return res.status(400).json({ error: "All fields are required." });
     }
 
@@ -20,18 +20,16 @@ exports.register = async (req, res) => {
         const user = new User({ 
             name, 
             email, 
-            password: hashedPassword,
-            role 
+            password: hashedPassword
         });
-        
+
         await user.save();
         res.status(201).json({ 
             message: "User registered successfully!",
             user: {
                 id: user._id,
                 name: user.name,
-                email: user.email,
-                role: user.role
+                email: user.email
             }
         });
     } catch (error) {
@@ -41,10 +39,10 @@ exports.register = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
-    const { email, password, role } = req.body;
+    const { email, password } = req.body;
 
-    if (!email || !password || !role) {
-        return res.status(400).json({ error: "Email, password, and role are required." });
+    if (!email || !password) {
+        return res.status(400).json({ error: "Email and password are required." });
     }
 
     try {
@@ -53,21 +51,15 @@ exports.login = async (req, res) => {
             return res.status(401).json({ error: "Invalid credentials." });
         }
 
-        if (user.role !== role) {
-            return res.status(401).json({ error: "Invalid role for this user." });
-        }
-
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return res.status(401).json({ error: "Invalid credentials." });
         }
 
-        // Return user data without JWT token
         res.status(200).json({ 
             user: {
                 name: user.name,
-                email: user.email,
-                role: user.role
+                email: user.email
             },
             message: "Login successful!" 
         });
