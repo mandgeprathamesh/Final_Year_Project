@@ -28,7 +28,7 @@ const UserSchema = new Schema({
         },
         coordinates: {
             type: [Number], // [longitude, latitude]
-            default: null
+            default: [0, 0]  // Default to [0, 0] for a placeholder location
         }
     },
     role: { 
