@@ -9,7 +9,6 @@ const userauthRoutes = require("./routes/UserAuthRoutes.js");
 const ambulanceauthRoutes = require("./routes/AmbulanceAuthRoutes.js");
 const ambulanceRoutes = require("./routes/ambulanceRoutes");
 const userRoutes = require("./routes/userRoutes");
-const sosRoutes = require("./routes/sosRoutes"); // Import SOS routes
 
 const app = express();
 const server = http.createServer(app);
@@ -29,7 +28,6 @@ app.use("/api/user/auth", userauthRoutes);
 app.use("/api/ambulance/auth", ambulanceauthRoutes);
 app.use("/api/ambulance", ambulanceRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/sos", sosRoutes); // Add SOS routes
 
 
 // Start Server
