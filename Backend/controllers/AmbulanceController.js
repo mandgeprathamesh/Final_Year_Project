@@ -14,7 +14,26 @@ exports.updateLocation = async (req, res) => {
         //     { latitude, longitude },
         //     { new: true, upsert: true }
         // );
-        res.status(200).json({ message: "Location updated successfully!" });
+        res.status(200).json({
+            "ambulances": [
+              {
+                "vehicleNumber": "AMB-123",
+                "driverName": "Dr. John Smith",
+                "type": "Advanced Life Support",
+                "latitude": 18.5204,
+                "longitude": 73.8567,
+                "status": "available"
+              },
+              {
+                "vehicleNumber": "AMB-124",
+                "driverName": "Dr. Sarah Johnson",
+                "type": "Basic Life Support",
+                "latitude": 18.5210,
+                "longitude": 73.8570,
+                "status": "available"
+              }
+            ]
+          });
     } catch (error) {
         res.status(500).json({ error: "Failed to update location." });
     }
