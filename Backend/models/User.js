@@ -31,6 +31,17 @@ const UserSchema = new Schema({
             default: [0, 0]  // Default to [0, 0] for a placeholder location
         }
     },
+    address: {
+        type: String,
+        trim: true,
+        default: ""
+    },
+    phoneNo: {
+        type: String,
+        trim: true,
+        match: [/^[0-9]{10,15}$/, 'Please enter a valid phone number'],
+        default: ""
+    },
     role: { 
         type: String, 
         enum: ["user", "admin"], // Added all roles
