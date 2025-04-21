@@ -2,11 +2,11 @@ const Ambulance = require("../models/Ambulance");
 
 exports.updateLocation = async (req, res) => {
     // const { id } = req.user; // Assume user is authenticated
-    const { latitude, longitude } = req.body;
+    // const { latitude, longitude } = req.body;
 
-    if (!latitude || !longitude) {
-        return res.status(400).json({ error: "Latitude and longitude are required." });
-    }
+    // if (!latitude || !longitude) {
+    //     return res.status(400).json({ error: "Latitude and longitude are required." });
+    // }
 
     try {
         // const ambulance = await Ambulance.findByIdAndUpdate(
